@@ -42,5 +42,18 @@
   
   
   
+  <entry>
+    <title>记一次溯源成功的经历</title>
+    <link href="/2025/03/02/%E6%BA%AF%E6%BA%90/"/>
+    <url>/2025/03/02/%E6%BA%AF%E6%BA%90/</url>
+    
+    <content type="html"><![CDATA[<h1 id="记一次溯源成功的经历"><a href="#记一次溯源成功的经历" class="headerlink" title="记一次溯源成功的经历"></a>记一次溯源成功的经历</h1><h3 id="时间线"><a href="#时间线" class="headerlink" title="时间线"></a>时间线</h3><p><strong>第一天</strong> </p><p>下午四点监控系统告警 经排查确认是内部人员 但是确认这个资产是脆弱资产 要求下线并且核查   </p><p>晚上20点左右 发现有人在对这个脆弱资产进行漏洞扫描 并且开始尝试上传文件  </p><p><strong>第二天</strong>  </p><p>中午11点左右 发现上述的脆弱资产对其他网段的机器开始漏洞扫描  </p><h3 id="攻击者攻击流程"><a href="#攻击者攻击流程" class="headerlink" title="攻击者攻击流程"></a>攻击者攻击流程</h3><p>攻击者借用了一位内部人员的vpn账号密码 成功连入内网  </p><p>然后对内网的资产进行漏洞扫描  </p><p>扫描到一个资产存在文件上传接口并且未限制文件后缀  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138077.png" alt="image-20250222112239479"></p><p>靠着这个接口 攻击者成功上传文件并且getshell  </p><p>然后攻击者使用mimikatz抓取了rdp登录密码 成功登录桌面  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138037.png"></p><p>并且在这台主机上面发现其他主机的数据库登录密码……  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138058.png" alt="image-20250222113215101"></p><p>(<strong>上面以及下面出现的截图 请看下面的社工环节</strong>)</p><h3 id="溯源流程"><a href="#溯源流程" class="headerlink" title="溯源流程"></a>溯源流程</h3><p>在第二天的中午11点左右 发现脆弱资产仍然没有下线并且开始对其他主机进行漏洞扫描时  </p><p>直接开始上机排查  </p><h4 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h4><p>主要是想在那个时间对通过vpn网站登录的人进行排查  </p><p>因为安全设备上面查看到了攻击者上传文件时的时间(当时认为没传上去 没想到真传上去了)  </p><p>但是询问上面的人得知vpn登录网站的日志功能早在2021年就坏了 没法查看  </p><h4 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h4><p>想通过查看这台主机的rdp登录日志去查看登录桌面的ip是啥  </p><p>但是攻击者是先通过vpn的登录网站登录进来 然后才能访问到那个脆弱资产  </p><p>而一旦通过vpn接入内网 ip地址会自动变成vpn的ip地址  </p><p>所以看不出来什么东西 也没什么用  </p><h4 id="思路3"><a href="#思路3" class="headerlink" title="思路3"></a>思路3</h4><p>突然想到那个脆弱资产或许是需要登录才能进行上传的操作的  </p><p>直接去查看那个站点的登录日志  </p><p>果然!  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138052.png" alt="image-20250222114005840"></p><p>看见了攻击者借用的账号  </p><p>于是乎接下来就很简单了  </p><p>根据这个账号找到了对应的人</p><p>直接让领导上压力 最后交代了是自己未经允许擅自将vpn账号密码借给外部人员导致资产被攻陷  </p><p>中间<strong>还有一个有意思的点</strong>  </p><p>这小子在被领导拷打的时候 说钟北山是他的同学 领导还信了  </p><p>找到对应的人之后就直接开始我们的社工环节  </p><h3 id="社工环节"><a href="#社工环节" class="headerlink" title="社工环节"></a>社工环节</h3><p>因为自己也比较好奇攻击者的详细进攻路线  </p><p>主要是传上来的文件有点多 不太清楚作用是什么  </p><p>于是乎 跟另外的师傅打了个配合 稍微社了一下  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138071.png" alt="image-20250222115309267"></p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138066.png" alt="image-20250222115419159"></p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138605.png" alt="image-20250222115641002"></p><p>成功拿下攻击者亲自写的报告  </p><p>刚开始还不想给呢  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138415.png" alt="image-20250222115808386"></p><p>这段是攻击者借账号密码的聊天记录 也一并社出来了  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138433.png" alt="image-20250222120140595"></p><p>最后还有一段极其精彩的电话上压力环节 可惜似乎放不出来了  </p><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202505051138439.png" alt="image-20250222115908447"></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
   
 </search>
